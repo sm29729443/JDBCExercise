@@ -1,3 +1,5 @@
+import com.mysql.cj.jdbc.Driver;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -27,6 +29,12 @@ public class JDBCQuick {
                 該對象包含了類的所有元數據信息。但獲取這個Class對象並不是我們的最終目的,
                 而是在加載類的過程中,觸發了驅動程序的註冊,為後續獲取數據庫連接做好了準備。
          */
+        // 由以上說明，知道也可以自己手動註冊 Driver
+        // DriverManager.registerDriver(new Driver());
+        /*
+            從 JDK 6.0 開始不需要在手動的去註冊 Driver，JDBC 引入了一種稱為 JDBC 4.0驅動程式自動加載
+            的技術，好像是會去掃描 jar 包裡的META-INF/services 裡的檔案啥的，這裡不記太細
+        */
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         // 2.獲取連接資料庫的物件
@@ -62,6 +70,8 @@ public class JDBCQuick {
             這樣算是連接一次就能執行多次操作，還是每執行一次 statement.execute()都會重新連接呢?
             Ans: 問 claude 3 是說算連接一次而已，並不會每次對資料庫操作一次就要重新連接一次。
          */
+
+        // 實際應用不會使用 Statement，因為會產生 sql injection，都是使用 prepareStatement
         Statement statement = connection.createStatement();
 
         // 4.編寫sql語句並且執行，並且接受返回的結果集
