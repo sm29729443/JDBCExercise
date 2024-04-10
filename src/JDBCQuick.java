@@ -85,5 +85,10 @@ public class JDBCQuick {
             System.out.print(", department_id:" + resultSet.getInt("department_id"));
             System.out.println();
         }
+
+        // 6. 關閉資源，先開後關原則
+            resultSet.close();
+            statement.close();
+            connection.close();
     }
 }
