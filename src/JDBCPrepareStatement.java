@@ -19,13 +19,13 @@ public class JDBCPrepareStatement {
 
         // 3.獲取執行sql語句的物件
         // 能看到 preparedStatement 不支持無參創建，必須先傳入一個要執行的 sql 語句
+        // prepareStatement 會預編譯此 sql 語句，也就是 sql語句已經固定，不可能透過sql injection
+        // 的方式來更改 sql 語句
         // 並且動態參數是以 ?占位符 方式決定，而不是使用動態拼接的方式
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employees WHERE first_name = ?");
         // 4.執行動態 sql 語句;
         Scanner scanner = new Scanner(System.in);
 
-        // 若是輸入 Steven' OR '1' = '1 會發現將資料庫的所有資料都查詢出來了，
-        // 這就是透過sql injection來使得資料外洩
         System.out.println("輸入 firstName: ");
         String firstName = scanner.nextLine();
         // parameterIndex 是設定第 x 個占位符所對應的變數，因此是從 1 開始
