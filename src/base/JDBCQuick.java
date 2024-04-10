@@ -1,3 +1,5 @@
+package base;
+
 import com.mysql.cj.jdbc.Driver;
 
 import java.sql.Connection;

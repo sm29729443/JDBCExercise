@@ -1,8 +1,10 @@
+package base;
+
 import java.sql.*;
 import java.util.Scanner;
 
 /**
- * ClassName: JDBCInjection
+ * ClassName: base.JDBCInjection
  * Package: PACKAGE_NAME
  */
 public class JDBCPrepareStatement {

@@ -1,3 +1,5 @@
+package base;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -5,7 +7,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 /**
- * ClassName: JDBCInjection
+ * ClassName: base.JDBCInjection
  * Package: PACKAGE_NAME
  */
 public class JDBCInjection {
