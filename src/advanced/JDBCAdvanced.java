@@ -94,10 +94,11 @@ public class JDBCAdvanced {
         preparedStatement.setString(1, student.getStudentName());
         preparedStatement.setInt(2, student.getStudentAge());
 
+        ResultSet generatedKeys = null;
         int i = preparedStatement.executeUpdate();
         if (i > 0) {
             // return 的 key 值會以 ResultSet 的型態拿到，而裡面就只有一個 key 值，所以是單行單列的
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            generatedKeys = preparedStatement.getGeneratedKeys();
             while (generatedKeys.next()) {
                 student.setStudentId(generatedKeys.getInt(1));
                 System.out.println("剛剛插入的資料的 key value:" + student.getStudentId() );
@@ -107,7 +108,9 @@ public class JDBCAdvanced {
             System.out.println("失敗");
         }
         System.out.println("student info:" + student);
-
+        if (generatedKeys != null) {
+        generatedKeys.close();
+        }
         preparedStatement.close();
         connection.close();
     }
