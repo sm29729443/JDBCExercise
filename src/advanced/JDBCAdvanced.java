@@ -115,4 +115,57 @@ public class JDBCAdvanced {
         connection.close();
     }
 
+    // 批量新增操作，第一種方法:透過 for loop 反覆執行
+    @Test
+    public void testMoreInsert() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/atguigudb";
+        String username = "root";
+        String password = "52091219";
+        Connection connection = DriverManager.getConnection(url, username, password);
+        String sql = "INSERT INTO STUDENTS(student_name, student_age)\n" +
+                " VALUES (?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10000; i++) {
+            preparedStatement.setString(1, "Mark" + i);
+            preparedStatement.setInt(2, 30 + i);
+
+            preparedStatement.executeUpdate();
+        }
+        long end = System.currentTimeMillis();
+        //執行時間: 3517
+        System.out.println("執行時間:" + (end - start));
+        preparedStatement.close();
+        connection.close();
+    }
+
+    //批量新增操作，第二種方法:透過 Batch 執行
+    @Test
+    public void testBatchInsert() throws SQLException {
+        // step 1: 設定 rewriteBatchedStatements = true
+        String url = "jdbc:mysql://localhost:3306/atguigudb?rewriteBatchedStatements=true";
+        String username = "root";
+        String password = "52091219";
+        Connection connection = DriverManager.getConnection(url, username, password);
+
+        // SQL 語句必須用VALUES，不能只是 VALUE，而且語句最後不能加 ;
+        // 教學是說會把 sql 語句拼裝成 VALUES(?, ?),(?, ?) ...
+        String sql = "INSERT INTO STUDENTS(student_name, student_age)\n" +
+                " VALUES (?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10000; i++) {
+            preparedStatement.setString(1, "Rush" + i);
+            preparedStatement.setInt(2, 30 + i);
+
+            // 調用 addBatch() 方法，將sql語句進行批量操作
+            preparedStatement.addBatch();
+        }
+        preparedStatement.executeBatch();
+        long end = System.currentTimeMillis();
+        System.out.println("執行時間:" + (end - start));
+        preparedStatement.close();
+        connection.close();
+    }
 }
